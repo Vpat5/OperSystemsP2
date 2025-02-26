@@ -46,16 +46,16 @@ char **cmd_parse(char const *line) {
     }
 
     // strdup first, then trim, so we free correctly
-    char *line_copy = strdup(line);
+    char *line_copy = strdup(line);  // Duplicate the input line
     if (line_copy == NULL) {
         perror("strdup");
         exit(EXIT_FAILURE);
     }
 
-    char *trimmed_line = trim_white(line_copy);
+    char *trimmed_line = trim_white(line_copy);  // Trim leading and trailing spaces
     if (*trimmed_line == '\0') {  // If only whitespace remains
-        free(line_copy);  // Free original allocation
-        char **argv = malloc(sizeof(char *));
+        free(line_copy);  // Free the duplicated line
+        char **argv = malloc(sizeof(char *));  // Return an empty array
         if (argv == NULL) {
             perror("malloc");
             exit(EXIT_FAILURE);
@@ -64,16 +64,16 @@ char **cmd_parse(char const *line) {
         return argv;
     }
 
-    char **argv = malloc((arg_max / 2) * sizeof(char *));
+    char **argv = malloc((arg_max / 2) * sizeof(char *));  // Allocate memory for arguments
     if (argv == NULL) {
         perror("malloc");
         exit(EXIT_FAILURE);
     }
 
     int argc = 0;
-    char *token = strtok(trimmed_line, " ");
+    char *token = strtok(trimmed_line, " ");  // Tokenize the trimmed line by spaces
     while (token != NULL && argc < (arg_max / 2 - 1)) {
-        argv[argc] = strdup(token);
+        argv[argc] = strdup(token);  // Duplicate each token
         if (argv[argc] == NULL) {
             perror("strdup");
             exit(EXIT_FAILURE);
@@ -82,8 +82,8 @@ char **cmd_parse(char const *line) {
         token = strtok(NULL, " ");
     }
 
-    argv[argc] = NULL;
-    free(line_copy);  // Free original allocation
+    argv[argc] = NULL;  // Null-terminate the argument array
+    free(line_copy);  // Free the original line_copy after processing
     return argv;
 }
 
@@ -94,9 +94,9 @@ void cmd_free(char **line) {
     }
 
     for (int i = 0; line[i] != NULL; i++) {
-        free(line[i]);
+        free(line[i]);  // Free each individual argument
     }
-    free(line);
+    free(line);  // Free the array holding the arguments
 }
 
 char *trim_white(char *line) {
