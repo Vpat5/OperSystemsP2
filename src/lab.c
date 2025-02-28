@@ -13,20 +13,6 @@
 #include <sys/wait.h>
 
 
-// char *get_prompt(const char *env) {
-//     const char *prompt = getenv(env);
-//     if (prompt == NULL) {
-//         prompt = "shell>";
-//     }
-//     char *result = strdup(prompt);
-//     if (result == NULL) {
-//         perror("strdup");
-//         exit(EXIT_FAILURE);
-//     }
-//     // strcpy(result, prompt);
-//     return result;
-// }
-
 char *get_prompt(const char *env) {
     char *rval = NULL;
     const char *tmp = getenv(env);
@@ -38,66 +24,6 @@ char *get_prompt(const char *env) {
     strncpy(rval, tmp, n);
     return rval;
 }
-
-// char **cmd_parse(char const *line) {
-//     long arg_max = sysconf(_SC_ARG_MAX);
-//     if (arg_max == -1) {
-//         perror("sysconf");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     if (line == NULL || *line == '\0') {
-//         // Return an empty array if input is NULL or empty
-//         char **argv = malloc(sizeof(char *));
-//         if (argv == NULL) {
-//             perror("malloc");
-//             exit(EXIT_FAILURE);
-//         }
-//         argv[0] = NULL;
-//         return argv;
-//     }
-
-//     // strdup first, then trim, so we free correctly
-//     char *line_copy = strdup(line);  // Duplicate the input line
-//     if (line_copy == NULL) {
-//         perror("strdup");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     char *trimmed_line = trim_white(line_copy);  // Trim leading and trailing spaces
-//     if (*trimmed_line == '\0') {  // If only whitespace remains
-//         free(line_copy);  // Free the duplicated line
-//         char **argv = malloc(sizeof(char *));  // Return an empty array
-//         if (argv == NULL) {
-//             perror("malloc");
-//             exit(EXIT_FAILURE);
-//         }
-//         argv[0] = NULL;
-//         return argv;
-//     }
-
-//     char **argv = malloc((arg_max / 2) * sizeof(char *));  // Allocate memory for arguments
-//     if (argv == NULL) {
-//         perror("malloc");
-//         exit(EXIT_FAILURE);
-//     }
-
-//     int argc = 0;
-//     char *token = strtok(trimmed_line, " ");  // Tokenize the trimmed line by spaces
-//     while (token != NULL && argc < (arg_max / 2 - 1)) {
-//         argv[argc] = strdup(token);  // Duplicate each token
-//         if (argv[argc] == NULL) {
-//             perror("strdup");
-//             exit(EXIT_FAILURE);
-//         }
-//         argc++;
-//         token = strtok(NULL, " ");
-//     }
-
-//     argv[argc] = NULL;  // Null-terminate the argument array
-//     free(line_copy);  // Free the original line_copy after processing
-//     return argv;
-// }
 
 char **cmd_parse(char const *line) {
     const long arg_max = sysconf(_SC_ARG_MAX);
@@ -209,12 +135,6 @@ void sh_init(struct shell *sh) {
     sh->prompt = get_prompt("MY_PROMPT");
 }
 
-// void sh_init(struct shell *sh)
-// {
-//     using_history();
-//     signal;
-// }
-
 void sh_destroy(struct shell *sh) {
     if (sh->prompt) {
         free(sh->prompt);
@@ -223,19 +143,6 @@ void sh_destroy(struct shell *sh) {
     exit(EXIT_SUCCESS);
     
 }
-
-// int change_dir(char **dir) {
-//     if (dir[1]) {
-//         const char *home = getenv("HOME");
-//         if (home == NULL) {
-//             struct passwd *pw = getpwuid(getuid());
-//             home = pw->pw_dir;
-//         }
-//         return chdir(home);
-//     } else {
-//         return chdir(dir[1]);
-//     }
-// }
 
 int change_dir(char **cmd) {
     int rval = -1;
@@ -265,21 +172,10 @@ void parse_args(int argc, char **argv)
                 printf("Usage: %s [-h]\n", argv[0]);
                 exit(0);
                 break;
-            // case '?':
-            //     if (isprint(optopt)) {
-            //         fprintf(stderr, "Unknown option `-%c'.\n", optopt);
-            //     } else {
-            //         fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-            //     }
-            //     exit(1);
-            //     break;
             default:
                 fprintf(stderr, "Usage: %s [-h]\n", argv[0]);
                 exit(EXIT_FAILURE);
         }
-    }
-    {
-        /* code */
     }
     
 }
